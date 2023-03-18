@@ -6,25 +6,21 @@ const store = createStore({
     products: [],
   },
   mutations: {
-    //   setCurrentUser(state, user) {
-    //     state.currentUser = user;
-    //   },
-    //   setIsLoggedIn(state, isLoggedIn) {
-    //     state.isLoggedIn = isLoggedIn;
-
-    setProducts(state, products) {
+    SET_PRODUCTS(state, products) {
       state.products = products;
     },
   },
   actions: {
     async getProducts({ commit }) {
       const response = await axios.get("https://dummyjson.com/products");
-      commit("setProducts", response.data);
+      const products = response.data.products;
+      commit("SET_PRODUCTS", products);
+      console.log(products);
     },
   },
   getters: {
-    getProductById: (state) => (id) => {
-      return state.products.find((product) => product.id === id);
+    products(state) {
+      return state.products;
     },
   },
 });
