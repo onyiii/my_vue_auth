@@ -3,7 +3,7 @@
     class="d-flex flex-column fs-2 justify-content-center align-items-center error-pg"
   >
     <b>Page not Found</b>
-    <a class="btn btn-dark fw-bold fs-4" href="/"> Back To Home</a>
+    <a class="btn btn-warning fw-bold fs-4 text-dark" href="/"> Back To Home</a>
   </div>
 </template>
 

@@ -4,6 +4,7 @@ import ContactPage from "./components/ContactPage.vue";
 import LogIn from "./components/LogIn.vue";
 import SignUp from "./components/SignUp.vue";
 import ProductPage from "./components/ProductPage.vue";
+import ProductsDetails from "./components/ProductsDetails.vue";
 import NotFound from "./components/NotFound.vue";
 
 //import store from "./store";
@@ -33,6 +34,11 @@ const routes = [
     path: "/products",
     name: "ProductPage",
     component: ProductPage,
+  },
+  {
+    path: "/products-details",
+    name: "ProductsDetails",
+    component: ProductsDetails,
   },
   {
     path: "/:catchAll(.*)",

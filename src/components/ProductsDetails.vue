@@ -2,25 +2,24 @@
   <div
     v-for="product in products"
     :key="product.id"
-    class="card d-inline-flex m-4 py-2"
-    style="width: 22rem; height: 20rem"
+    class="card d-flex d-inline-flex border-none m-3 h-10"
+    style="width: 18rem"
   >
     <ul>
-      <div>
-        <img :src="product.thumbnail" alt="" class="card-img-top cards" />
-      </div>
+      <li><img :src="product.thumbnail" alt="" class="card-img-top h-25" /></li>
       <div class="card-body">
-        <div class="card-title">Brand: {{ product.brand }}</div>
-        <div class="card-title">Model: {{ product.title }}</div>
-        <div>Price: ${{ product.price }}</div>
-        <div>
+        <li class="card-title">Brand: {{ product.brand }}</li>
+        <li class="card-title">Model: {{ product.title }}</li>
+
+        <li>Price: ${{ product.price }}</li>
+        <li>
           <a
-            href="/products-details"
+            :href="product.description"
             class="btn btn-warning text-dark"
             style="--bs-text-opacity: 0.5"
             >More Details</a
           >
-        </div>
+        </li>
       </div>
     </ul>
   </div>
@@ -45,8 +44,7 @@ export default {
 </script>
 
 <style>
-.cards {
-  height: 100px;
-  width: 200px;
+li {
+  list-style: none;
 }
 </style>
