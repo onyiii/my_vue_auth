@@ -42,13 +42,9 @@ input {
   margin: 10px;
   padding: 20px 200px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
 }
-.submit {
-  padding: 10px 60px;
-  font-size: 25px;
-  font-weight: 50px;
+
+a:hover {
+  border-bottom: 2px solid #ffbf00;
 }
 </style>
