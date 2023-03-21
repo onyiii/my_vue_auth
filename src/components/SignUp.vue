@@ -1,6 +1,7 @@
 <template>
   <div class="signup">
-    <form class="bg-dark text-warning">
+    <div v-if="error" class="alert alert-danger">{{ error }}</div>
+    <form action="#" @submit.prevent="Register" class="bg-dark text-warning">
       <div class="display-6">Sign Up</div>
       <div>
         <input
@@ -43,15 +44,9 @@
       </div>
       <button
         class="btn bg-dark text-warning border border-2 border-warning mb-2"
-        @click="register"
+        type="submit"
       >
-        Submit
-      </button>
-      <button
-        class="btn bg-dark text-warning border border-2 border-warning"
-        @click="signInWithGoogle"
-      >
-        Sign In With Google
+        Register
       </button>
     </form>
   </div>
@@ -59,53 +54,36 @@
 
 <script>
 import { ref } from "vue";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  googleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 export default {
   name: "SignUp",
+
   setup() {
+    const name = ref("");
     const email = ref("");
     const password = ref("");
-    const name = ref("");
+    const error = ref(null);
+
+    const store = useStore();
     const router = useRouter();
-    const register = () => {
-      const auth = getAuth;
-      createUserWithEmailAndPassword(auth(), email.value, password.value)
-        .then((data) => {
-          console.log(data);
-          alert("Successfully registered");
-          router.push("/login");
-        })
-        .catch((error) => {
-          console.log(error.code);
-          alert(error.message);
+
+    const Register = async () => {
+      try {
+        await store.dispatch("register", {
+          email: email.value,
+          password: password.value,
+          name: name.value,
         });
+        alert("Successfully registered");
+        router.push("/login");
+      } catch (err) {
+        error.value = err.message;
+      }
     };
-    const signInWithGoogle = () => {
-      const provider = new googleAuthProvider();
-      signInWithPopup(getAuth(), provider)
-        .then((result) => {
-          console.log(result.user);
-          router.push("/products");
-        })
-        .catch((error) => {
-          console.log(error.code);
-          alert(error.message);
-        });
-    };
-    return {
-      signInWithGoogle,
-      register,
-      name,
-      email,
-      password,
-    };
+
+    return { Register, name, email, password, error };
   },
 };
 </script>

@@ -60,7 +60,7 @@
         class="text-decoration-none border border-3 border-warning bg-warning fw-bold text-dark"
         to="/"
         style="--bs-text-opacity: 0.75"
-        @click="handleSignOut"
+        @click.prevent="signout"
         >Log Out</router-link
       >
     </nav>
@@ -69,9 +69,11 @@
 
 <script>
 import logo1 from "../assets/logo1.png";
-import { onMounted, ref } from "vue";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import router from "@/routers";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+// import router from "@/routers";
+import { useStore } from "vuex";
 
 export default {
   name: "NavBar",
@@ -81,27 +83,23 @@ export default {
     };
   },
   setup() {
-    const isLoggedIn = ref(false);
-    let auth;
-    onMounted(() => {
-      auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          isLoggedIn.value = true;
-        } else {
-          isLoggedIn.value = false;
-        }
-      });
+    const store = useStore();
+    const router = useRouter();
+    let auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      store.dispatch("fetchUser", user);
     });
-    const handleSignOut = () => {
-      signOut(auth).then(() => {
-        router.push("/");
-      });
+
+    const user = computed(() => {
+      return store.getters.user;
+    });
+
+    const signout = async () => {
+      await store.dispatch("logout");
+      router.push("/");
     };
-    return {
-      handleSignOut,
-      isLoggedIn,
-    };
+    return { user, signout };
   },
 };
 </script>

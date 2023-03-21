@@ -2,10 +2,10 @@
   <div
     v-for="product in products"
     :key="product.id"
-    class="card d-inline-flex m-4 py-2"
+    class="card d-inline-flex justify-content-evenly m-4 py-2"
     style="width: 22rem; height: 20rem"
   >
-    <ul>
+    <div>
       <div>
         <img :src="product.thumbnail" alt="" class="card-img-top cards" />
       </div>
@@ -15,22 +15,28 @@
         <div>Price: ${{ product.price }}</div>
         <div>
           <a
-            href="/products-details"
+            href="#"
             class="btn btn-warning text-dark"
             style="--bs-text-opacity: 0.5"
             >More Details</a
           >
         </div>
       </div>
-    </ul>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+// import { useStore } from "vuex";
+// //import { useRouter } from "vue-router";
+// import { computed } from "vue";
+// import { getAuth } from "firebase/auth";
 
 //import axios from "axios";
 export default {
+  //import axios from "axios";
+
   name: "ProductPage",
   created() {
     this.getProducts();
@@ -42,6 +48,16 @@ export default {
     ...mapActions(["getProducts"]),
   },
 };
+
+//   created() {
+//     this.getProducts();
+//   },
+//   computed: {
+//     ...mapGetters(["products"]),
+//   },
+//   methods: {
+//     ...mapActions(["getProducts"]),
+//   },
 </script>
 
 <style>
@@ -50,3 +66,7 @@ export default {
   width: 200px;
 }
 </style>
+
+<!-- const store = useStore() const router = useRouter() auth.onAuthStateChanged(user
+=> { store.dispatch("fetchUser", user); }); const user = computed(() => { return
+store.getters.user; }); -->
