@@ -1,6 +1,5 @@
 <template>
   <div class="login">
-    <div v-if="error" class="alert alert-danger">{{ error }}</div>
     <form @submit.prevent="Login" class="bg-dark text-warning">
       <div class="display-6">Login</div>
       <div>
@@ -37,9 +36,16 @@
       <button
         class="btn bg-dark text-warning border border-2 border-warning mb-2"
         type="submit"
+        :disabled="loading"
       >
-        Log In
+        {{ loading ? "Loading..." : "Login" }}
       </button>
+      <div
+        v-if="error"
+        class="alert alert-dark d-flex justify-content-center text-align-center"
+      >
+        {{ error }}
+      </div>
     </form>
   </div>
 </template>
@@ -48,29 +54,36 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+//import VueLoadingButton from "vue-loading-button";
 export default {
   name: "LogIn",
+
   setup() {
     const email = ref("");
     const password = ref("");
-    const error = ref(null);
+    const error = ref("");
 
     const store = useStore();
     const router = useRouter();
+    const loading = ref(false);
 
     const Login = async () => {
+      loading.value = true;
+      error.value = "";
       try {
         await store.dispatch("login", {
           email: email.value,
           password: password.value,
         });
-        alert("logged in");
+
         router.push("/products");
-      } catch (err) {
-        error.value = err.message;
+      } catch (e) {
+        error.value = "Invalid email or password";
+      } finally {
+        loading.value = false;
       }
     };
-    return { Login, email, password, error };
+    return { Login, email, password, error, loading };
   },
 };
 </script>

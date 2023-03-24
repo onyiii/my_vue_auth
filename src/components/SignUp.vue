@@ -1,6 +1,5 @@
 <template>
   <div class="signup">
-    <div v-if="error" class="alert alert-danger">{{ error }}</div>
     <form action="#" @submit.prevent="Register" class="bg-dark text-warning">
       <div class="display-6">Sign Up</div>
       <div>
@@ -45,9 +44,16 @@
       <button
         class="btn bg-dark text-warning border border-2 border-warning mb-2"
         type="submit"
+        :disabled="loading"
       >
-        Register
+        {{ loading ? "Loading..." : "Signup" }}
       </button>
+      <div
+        v-if="error"
+        class="alert alert-dark d-flex justify-content-center text-align-center"
+      >
+        {{ error }}
+      </div>
     </form>
   </div>
 </template>
@@ -64,12 +70,15 @@ export default {
     const name = ref("");
     const email = ref("");
     const password = ref("");
-    const error = ref(null);
+    const error = ref("");
+    const loading = ref(false);
 
     const store = useStore();
     const router = useRouter();
 
     const Register = async () => {
+      loading.value = true;
+      error.value = "";
       try {
         await store.dispatch("register", {
           email: email.value,
@@ -78,12 +87,14 @@ export default {
         });
         alert("Successfully registered");
         router.push("/login");
-      } catch (err) {
-        error.value = err.message;
+      } catch (e) {
+        error.value = "Signup failed";
+      } finally {
+        loading.value = false;
       }
     };
 
-    return { Register, name, email, password, error };
+    return { Register, name, email, password, error, loading };
   },
 };
 </script>

@@ -14,7 +14,9 @@
     "core-js": "^3.8.3",
     "firebase": "^9.18.0",
     "vue": "^3.2.13",
+    "vue-loading-button": "^0.2.0",
     "vue-router": "^4.1.6",
+    "vue-simple-spinner": "^1.2.10",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
