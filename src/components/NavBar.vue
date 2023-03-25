@@ -52,7 +52,6 @@
         to="/login"
         exact
         :class="{ active: $route.path === '/login' }"
-        v-if="!isLoggedIn"
         >Login</router-link
       >
 
@@ -69,10 +68,7 @@
 
 <script>
 import logo1 from "../assets/logo1.png";
-import { computed } from "vue";
 import { useRouter } from "vue-router";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-// import router from "@/routers";
 import { useStore } from "vuex";
 
 export default {
@@ -85,21 +81,12 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
-    let auth = getAuth();
-
-    onAuthStateChanged(auth, (user) => {
-      store.dispatch("fetchUser", user);
-    });
-
-    const user = computed(() => {
-      return store.getters.user;
-    });
 
     const signout = async () => {
       await store.dispatch("logout");
-      router.push("/");
+      router.replace("/");
     };
-    return { user, signout };
+    return { signout };
   },
 };
 </script>

@@ -27,13 +27,6 @@ const store = createStore({
     },
   },
   actions: {
-    async getProducts({ commit }) {
-      const response = await axios.get("https://dummyjson.com/products");
-      const products = response.data.products;
-      commit("SET_PRODUCTS", products);
-      console.log(products);
-    },
-
     async register(context, { email, password }) {
       const auth = getAuth;
       const response = await createUserWithEmailAndPassword(
@@ -57,6 +50,7 @@ const store = createStore({
       );
       if (response) {
         context.commit("SET_USER", response.user);
+        this.state.user.isLoggedIn = true;
       } else {
         throw new Error("login failed");
       }
@@ -65,7 +59,19 @@ const store = createStore({
     async logout(context) {
       const auth = getAuth;
       await signOut(auth);
-      context.commit("SET_USER", null);
+      context.commit("SET_LOGGED_IN", false);
+    },
+
+    async getProducts(context, user) {
+      context.commit("SET_LOGGED_IN", user !== null);
+      if (user) {
+        const response = await axios.get("https://dummyjson.com/products");
+        const products = response.data.products;
+        context.commit("SET_PRODUCTS", products);
+        console.log(products);
+      } else {
+        context.commit("SET_PRODUCTS", null);
+      }
     },
   },
   getters: {

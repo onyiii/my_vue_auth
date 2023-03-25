@@ -6,9 +6,8 @@ import SignUp from "./components/SignUp.vue";
 import ProductPage from "./components/ProductPage.vue";
 
 import NotFound from "./components/NotFound.vue";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-//import store from "./store";
+import store from "./store";
 
 const routes = [
   {
@@ -35,9 +34,9 @@ const routes = [
     path: "/products",
     name: "ProductPage",
     component: ProductPage,
-    // meta: {
-    //   requiresAuth: true,
-    // },
+    meta: {
+      isAuth: true,
+    },
   },
 
   {
@@ -51,25 +50,14 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
-const getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-    const removeListener = onAuthStateChanged(
-      getAuth(),
-      (user) => {
-        removeListener();
-        resolve(user);
-      },
-      reject
-    );
-  });
-};
 
-router.beforeEach(async (to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (await getCurrentUser()) {
-      next("/products");
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.isAuth)) {
+    if (!store.state.user.isLoggedIn) {
+      next({
+        path: "/login",
+      });
     } else {
-      alert("Log In to view Products");
       next();
     }
   } else {
