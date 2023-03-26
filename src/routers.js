@@ -19,6 +19,10 @@ const routes = [
     path: "/login",
     name: "LogIn",
     component: LogIn,
+    meta: {
+      isAuth: false,
+      requireGuest: true,
+    },
   },
   {
     path: "/contact",
@@ -53,9 +57,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.isAuth)) {
-    if (!store.state.user.isLoggedIn) {
+    if (!store.state.user.isAuthenticated) {
       next({
         path: "/login",
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some((record) => record.meta.requireGuest)) {
+    if (store.state.user.isAuthenticated) {
+      next({
+        path: "/products",
       });
     } else {
       next();

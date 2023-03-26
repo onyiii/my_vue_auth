@@ -11,8 +11,9 @@ const store = createStore({
   state: {
     products: [],
     user: {
-      isLoggedIn: false,
+      isAuthenticated: false,
       data: null,
+      isLoggedIn: false,
     },
   },
   mutations: {
@@ -20,7 +21,7 @@ const store = createStore({
       state.products = products;
     },
     SET_LOGGED_IN(state, value) {
-      state.user.isLoggedIn = value;
+      state.user.isAuthenticated = value;
     },
     SET_USER(state, data) {
       state.user.data = data;
@@ -50,6 +51,7 @@ const store = createStore({
       );
       if (response) {
         context.commit("SET_USER", response.user);
+        this.state.user.isAuthenticated = true;
         this.state.user.isLoggedIn = true;
       } else {
         throw new Error("login failed");

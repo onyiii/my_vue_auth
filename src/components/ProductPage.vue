@@ -19,6 +19,7 @@
               href="#"
               class="btn btn-warning text-dark"
               style="--bs-text-opacity: 0.5"
+              @click="details = !details"
               >More Details</a
             >
           </div>
@@ -35,7 +36,12 @@ import { getAuth } from "firebase/auth";
 
 export default {
   name: "ProductPage",
-
+  data() {
+    return {
+      details: false,
+      // other properties
+    };
+  },
   setup() {
     const auth = getAuth();
     auth.onAuthStateChanged((products) => {
